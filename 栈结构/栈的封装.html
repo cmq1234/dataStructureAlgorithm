@@ -50,6 +50,20 @@
     console.log(s.isEmpty())
     console.log(s.size())
     console.log(s.toString())
+
+    // 十进制转二进制
+    function dec2bin(decNumber) {
+        let stack = new Stack()
+        while(decNumber > 0) {
+            stack.push(decNumber % 2)
+            decNumber = decNumber / 2
+        }
+        let binString = ''
+        while (stack.isEmpty()) {
+            binString += stack.pop()
+        }
+        return binString
+    }
 </script>
 </body>
 </html>
