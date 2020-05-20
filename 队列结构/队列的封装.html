@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>队列的封装</title>
+</head>
+<body>
+<script>
+    function Queue() {
+        this.items = []
+        // 1.入队
+        Queue.prototype.enqueue = function (element) {
+            this.items.push(element)
+        }
+        // 2.出队
+        Queue.prototype.dequeue = function () {
+            this.items.shift()
+        }
+        // 3.查看前端元素
+        Queue.prototype.front = function () {
+            return this.items[0]
+        }
+        // 4.判断是否为空
+        Queue.prototype.isEmpty = function () {
+            return this.items.length === 0
+        }
+        // 5.获取元素个数
+        Queue.prototype.size = function () {
+            return this.items.length
+        }
+        // 6.toString方法
+        Queue.prototype.toString = function () {
+            let resultString = ''
+            for(let i = 0; i < this.items.length; i++){
+                resultString += this.items[i]
+            }
+            return resultString
+        }
+    }
+
+    // 击鼓传花
+    function passGame(list, num) {
+        let queue = new Queue()
+        for(let i = 0; i < list.length; i++){
+            queue.enqueue(list[i])
+        }
+        while (queue.size() > 1){
+            for (let i = 0; i < num - 1; i++){
+                queue.enqueue(queue.dequeue())
+            }
+            queue.dequeue()
+        }
+        return queue.front()
+    }
+</script>
+</body>
+</html>
