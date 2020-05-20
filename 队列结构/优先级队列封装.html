@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>优先级队列封装</title>
+</head>
+<body>
+<script>
+    function PriorityQueue() {
+        this.items = []
+        function QueueElement(element, priority) {
+            this.element = element
+            this.priority = priority
+        }
+
+        PriorityQueue.prototype.enqueue = function (element, priority) {
+            let queueElement = new QueueElement(element, priority)
+            if(this.items.length === 0){
+                this.items.push(queueElement)
+            }else {
+                let flag = false
+                for (let i = 0; i < this.items.length; i++){
+                    if (priority < this.items[i].priority) {
+                        this.items.splice(1, 0, queueElement)
+                        flag = true
+                        break
+                    }
+                }
+                if (!flag){
+                    this.items.push(queueElement)
+                }
+            }
+        }
+        // 2.出队
+        PriorityQueue.prototype.dequeue = function () {
+            this.items.shift()
+        }
+        // 3.查看前端元素
+        PriorityQueue.prototype.front = function () {
+            return this.items[0]
+        }
+        // 4.判断是否为空
+        PriorityQueue.prototype.isEmpty = function () {
+            return this.items.length === 0
+        }
+        // 5.获取元素个数
+        PriorityQueue.prototype.size = function () {
+            return this.items.length
+        }
+        // 6.toString方法
+        PriorityQueue.prototype.toString = function () {
+            let resultString = ''
+            for(let i = 0; i < this.items.length; i++){
+                resultString += this.items[i].element + '-' + this.items[i].priority
+            }
+            return resultString
+        }
+    }
+
+    let pq = new PriorityQueue()
+    pq.enqueue('a', 12)
+    pq.enqueue('b', 66)
+    pq.enqueue('c', 32)
+    pq.enqueue('d', 21)
+    console.log(pq)
+
+</script>
+</body>
+</html>
