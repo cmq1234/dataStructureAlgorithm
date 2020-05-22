@@ -49,12 +49,13 @@
                 let current = this.head
                 let pervious = null
                 while(index++ < position){
-                    position = current
+                    pervious = current
                     current = current.next
                 }
                 newNode.next = current
-                position.next = newNode
+                pervious.next = newNode
             }
+            this.length++
             return true
         }
         LinkedList.prototype.get = function (position) {
@@ -66,6 +67,55 @@
             }
             return current.data
         }
+        LinkedList.prototype.indexOf = function (data) {
+            let current = this.head
+            let index = 0
+            while(current){
+                if (current.data === data) {
+                    return index
+                }
+                index++
+                current = current.next
+            }
+            return -1
+        }
+        LinkedList.prototype.update = function (position, newData) {
+            let current = this.head
+            let index = 0
+            if(position < 0 || position >= this.length) return false
+            while(index++ < position) {
+                current = current.next
+            }
+            current.data = newData
+            return true
+        }
+        LinkedList.prototype.removeAt = function (position) {
+            if(position < 0 || position >= this.length) return false
+            let current = this.head
+            let pervious = null
+            let index = 0
+            if(position === 0) {
+                this.head = this.head.next
+                return current.data
+            }
+            while(index++ < position){
+                pervious = current
+                current = current.next
+            }
+            pervious.next = current.next
+            this.length--
+            return current.data
+        }
+        LinkedList.prototype.remove = function (data) {
+            let position = this.indexOf(data)
+            return this.removeAt(position)
+        }
+        LinkedList.prototype.isEmpty = function () {
+            return this.length === 0
+        }
+        LinkedList.prototype.size = function () {
+            return this.length
+        }
     }
 
     let link = new LinkedList()
@@ -74,6 +124,10 @@
     link.append(30)
     link.append(40)
     link.insert(15,4)
+    console.log(link.toString());
+    console.log(link.indexOf(30))
+    console.log(link.update(4, 200))
+    console.log(link.remove(10))
     console.log(link.toString());
 </script>
 </body>
