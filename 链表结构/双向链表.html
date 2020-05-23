@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>双向链表</title>
+</head>
+<body>
+<script>
+    function DoublyLinkedList() {
+        this.head = null
+        this.tail = null
+        this.length = 0
+        function Node(data) {
+            this.data = data
+            this.next = null
+            this.perv = null
+        }
+        DoublyLinkedList.prototype.append = function (data) {
+            let newNode = new Node(data)
+            if(this.length === 0){
+                this.head = newNode
+                this.tail = newNode
+            }else {
+                newNode.perv = this.tail
+                this.tail.next = newNode
+                this.tail = newNode
+            }
+        }
+    }
+</script>
+</body>
+</html>
