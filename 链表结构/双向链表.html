@@ -25,8 +25,67 @@
                 this.tail.next = newNode
                 this.tail = newNode
             }
+            this.length++
+        }
+        DoublyLinkedList.prototype.toString = function () {
+            return this.backwardString()
+        }
+        DoublyLinkedList.prototype.forwardString = function () {
+            let current = this.tail
+            let resultString = ''
+            while(current) {
+                resultString += current.data + ' '
+                current = current.perv
+            }
+            return resultString
+        }
+        DoublyLinkedList.prototype.backwardString = function () {
+            let current = this.head
+            let resultString = ''
+            while(current) {
+                resultString += current.data + ' '
+                current = current.next
+            }
+            return resultString
+        }
+        DoublyLinkedList.prototype.inster = function (position, data) {
+            if (position < 0 || position > this.length) return false
+            let current = this.head
+            let newNode = new Node(data)
+            if(this.length === 0){
+                this.head = newNode
+                this.tail = newNode
+            } else if (position === 0){
+                newNode.next = this.head
+                this.head.perv = newNode
+                this.head = newNode
+            } else if (position === this.length) {
+                newNode.perv = this.tail
+                this.tail.next = newNode
+                this.tail = newNode
+            } else {
+                let index = 0
+                while(index++ < position) {
+                    current = current.next
+                }
+                newNode.next = current
+                newNode.perv = current.perv
+                current.perv.next = newNode
+                current.perv = newNode
+            }
+            this.length++
+            return true
         }
     }
+     let link = new DoublyLinkedList()
+    link.append(10)
+    link.append(20)
+    link.append(30)
+    link.inster(0, 50)
+    link.inster(2, 60)
+    console.log(link.toString());
+    console.log(link.forwardString());
+    console.log(link.backwardString());
 </script>
 </body>
 </html>
