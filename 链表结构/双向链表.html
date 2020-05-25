@@ -76,6 +76,76 @@
             this.length++
             return true
         }
+        DoublyLinkedList.prototype.get = function (position) {
+            if (position < 0 || position >= this.length) return null
+            let current = this.head
+            let index = 0
+            while(index++ < position) {
+                current = current.next
+            }
+            return current.data
+        }
+        DoublyLinkedList.prototype.indexOf = function (data) {
+            let current = this.head
+            let index = 0
+            while(current) {
+                if (current.data === data) {
+                    return index
+                }
+                current = current.next
+                index++
+            }
+            return -1
+        }
+        DoublyLinkedList.prototype.update = function (position, data) {
+            if (position < 0 || position >= this.length) return false
+            let current = this.head
+            let index = 0
+            while(index++ < position) {
+                current = current.next
+            }
+            current.data = data
+            return true
+        }
+        DoublyLinkedList.prototype.removeAt = function (position) {
+            if (position < 0 || position > this.length) return false
+            let current = this.head
+            if(this.length === 0){
+                this.head = null
+                this.tail = null
+            } else if (position === 0){
+                current.perv = null
+                this.head.next = current.next
+            } else if (position === this.length) {
+                this.tail.perv.next = null
+                this.tail = this.tail.perv
+            } else {
+                let index = 0
+                while(index++ < position) {
+                    current = current.next
+                }
+                current.perv.next = current.next
+                current.next.perv = current.perv
+            }
+            this.length--
+            return current.data
+        }
+        DoublyLinkedList.prototype.remove = function (data) {
+            let index = this.indexOf(data)
+            return this.removeAt(index)
+        }
+        DoublyLinkedList.prototype.isEmpty = function () {
+            return this.length === 0
+        }
+        DoublyLinkedList.prototype.size = function () {
+            return this.length
+        }
+        DoublyLinkedList.prototype.getHead = function () {
+            return this.head.data
+        }
+        DoublyLinkedList.prototype.geTail = function () {
+            return this.tail.data
+        }
     }
      let link = new DoublyLinkedList()
     link.append(10)
@@ -83,9 +153,10 @@
     link.append(30)
     link.inster(0, 50)
     link.inster(2, 60)
+    link.update(0, 999)
+    link.removeAt(2)
     console.log(link.toString());
-    console.log(link.forwardString());
-    console.log(link.backwardString());
+    console.log(link.indexOf(20));
 </script>
 </body>
 </html>
