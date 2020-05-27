@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>哈希函数</title>
+</head>
+<body>
+<script>
+    function hashFun(str, size) {
+        let hashCode = 0
+        for(let i = 0;i < str.length; i++) {
+            hashCode = hashCode * 37 + str.charCodeAt(i)
+        }
+        let index = hashCode % size
+        return index
+    }
+    console.log(hashFun('nba', 7))
+    console.log(hashFun('10', 7))
+    console.log(hashFun('20', 7))
+</script>
+</body>
+</html>
