@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>树结构</title>
+</head>
+<body>
+<script>
+    function BinarySearchTree() {
+        this.root = null
+        function Node(key) {
+            this.key = key
+            this.left = null
+            this.right = null
+        }
+
+        BinarySearchTree.prototype.insert = function (key) {
+            let newNode = new Node(key)
+            if(this.root === null){
+                this.root = newNode
+            }else {
+                this.insertNode(this.root, newNode)
+            }
+        }
+        BinarySearchTree.prototype.insertNode = function (node, newNode) {
+            if (node.key < newNode.key){
+                if (node.right === null) {
+                    node.right = newNode
+                } else {
+                    this.insertNode(node.right, newNode)
+                }
+            } else {
+                if (node.left === null) {
+                    node.left = newNode
+                } else {
+                    this.insertNode(node.left, newNode)
+                }
+            }
+        }
+        BinarySearchTree.prototype.preOrderTraversal = function (callBack) {
+            this.preOrderTraversalNode(this.root, callBack)
+        }
+        BinarySearchTree.prototype.preOrderTraversalNode = function (node, callBack) {
+            if (node !== null) {
+                callBack(node.key)
+                this.preOrderTraversalNode(node.left, callBack)  //左侧遍历结束后，递归回退，遍历右侧
+                this.preOrderTraversalNode(node.right, callBack)
+            }
+        }
+        BinarySearchTree.prototype.midOrderTraversal = function (callBack) {
+            this.midOrderTraversalNode(this.root, callBack)
+        }
+        BinarySearchTree.prototype.midOrderTraversalNode = function (node, callBack) {
+            if (node !== null) {
+                this.preOrderTraversalNode(node.left, callBack)  //左侧遍历结束后，递归回退，遍历右侧
+                callBack(node.key)
+                this.preOrderTraversalNode(node.right, callBack)
+            }
+        }
+        BinarySearchTree.prototype.postOrderTraversal = function (callBack) {
+            this.postOrderTraversalNode(this.root, callBack)
+        }
+        BinarySearchTree.prototype.postOrderTraversalNode = function (node, callBack) {
+            if (node !== null) {
+                this.preOrderTraversalNode(node.left, callBack)  //左侧遍历结束后，递归回退，遍历右侧
+                this.preOrderTraversalNode(node.right, callBack)
+                callBack(node.key)
+            }
+        }
+        BinarySearchTree.prototype.max = function () {
+            let node = this.root
+            while(node.left !== null) {
+                node = node.left
+            }
+            return node.key
+        }
+        BinarySearchTree.prototype.min = function () {
+            let node = this.root
+            while(node.right !== null) {
+                node = node.right
+            }
+            return node.key
+        }
+        BinarySearchTree.prototype.search = function (key) {
+            return this.searchNode(this.root, key) //递归
+            // let node = this.root  //循环
+            // while(node !== null) {
+            //     if (key < node.key) {
+            //         node = node.left
+            //     } else if (key > node.key){
+            //         node = node.right
+            //     } else {
+            //         return true
+            //     }
+            // }
+            // return false
+        }
+        BinarySearchTree.prototype.searchNode = function (node, key) {
+            if (node === null) return false
+            if (key < node.key) {
+                return this.searchNode(node.left, key)
+            } else if (key > node.key){
+                return this.searchNode(node.right, key)
+            } else {
+                return true
+            }
+        }
+        BinarySearchTree.prototype.remove = function (key) {
+            let current = this.root
+            let parent = null
+            let isLeftChild = false  //记录删除节点再其父节点的哪一测
+            while(current.key !== key) {
+                if (current === null) return false
+                parent = current
+                if (key < current.key){
+                    isLeftChild = true
+                    current = current.left
+                } else {
+                    isLeftChild = false
+                    current = current.right
+                }
+            }
+            if (current.left === null && current.right === null){ //叶子节点
+                if (parent = null) {
+                    this.root = null
+                } else if (isLeftChild){
+                    parent.left = null
+                } else {
+                    parent.right = null
+                }
+            } else if (current.left === null) { //只有左节点
+                if (current === this.root) {
+                    this.root = current.right
+                } else if (isLeftChild) {
+                    parent.left = current.right
+                } else {
+                    parent.right = current.right
+                }
+            } else if (current.right === null) {  //只有右节点
+                if (current === this.root) {
+                    this.root = current.left
+                } else if (isLeftChild) {
+                    parent.left = current.left
+                } else {
+                    parent.right = current.left
+                }
+            } else {
+                let succssor = this.getSuccssor(current)
+                if(current === this.root){
+                    this.root = succssor
+                } else if(isLeftChild) {
+                    parent.left = succssor
+                } else {
+                    parent.right = succssor
+                }
+                succssor.left = current.left
+            }
+        }
+        BinarySearchTree.prototype.getSuccssor = function (delNode) {  //寻找后继节点
+            let succssor = delNode
+            let current = delNode.right
+            let succssorParent = delNode
+            while(current !== null) {
+                succssorParent = succssor
+                succssor = current
+                current = current.left
+            }
+            if (succssor !== delNode.right){  //后继节点不是删除节点的叶子节点
+                succssorParent.left = succssor.right
+                succssor.right = delNode.right
+            }
+            return succssor
+        }
+    }
+
+    let bst = new BinarySearchTree()
+    bst.insert(11)
+    bst.insert(6)
+    bst.insert(8)
+    bst.insert(4)
+    bst.insert(16)
+    bst.insert(15)
+    bst.insert(18)
+    bst.remove(6)
+    bst.remove(16)
+    let result = ''
+    bst.preOrderTraversal(res => {
+        result += res + ' '
+    })
+    console.log(result)
+    console.log(bst.search(14))
+
+</script>
+</body>
+</html>
