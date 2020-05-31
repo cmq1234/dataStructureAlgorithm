@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图结构</title>
+</head>
+<body>
+<script src="dist.js"></script>
+<script>
+    function Graph() {
+        this.vertexes = []  //顶点
+        this.edges = new Dictinay() //边
+
+        Graph.prototype.addVertex = function (v) {
+            this.vertexes.push(v)
+            this.edges.set(v, [])
+        }
+        Graph.prototype.addEdge = function (v1, v2) {
+            this.edges.get(v1).push(v2)
+            this.edges.get(v2).push(v1)
+        }
+        Graph.prototype.toString = function () {
+            let result = ''
+            for(let i = 0; i< this.vertexes.length; i++) {
+                result += this.vertexes[i] + '->'
+                let vEdge = this.edges.get(this.vertexes[i])
+                for(let j = 0; j < vEdge.length; j++) {
+                    result += vEdge[j] + ' '
+                }
+                result += '\n'
+            }
+            return result
+        }
+        Graph.prototype.bfs = function (v, callBack) {
+            let color = {}
+            for (let i = 0; i < this.vertexes.length; i++){
+                color[this.vertexes[i]] = 'white' // 未访问
+            }
+            let list = []  // 队列思想
+            list.push(v)  // 入队
+            color[v] = 'gray' // 颜色表示已访问
+            while(list.length !== 0){  //遍历队列
+                let v = list.shift()  //出对
+                let vList = this.edges.get(v)
+                for(let i = 0; i < vList.length; i++){  //遍历v的所有相连边，判断是否被访问，为访问则入队
+                    if (color[vList[i]] === 'white'){
+                        color[vList[i]] = 'gray'
+                        list.push(vList[i])
+                    }
+                }
+                callBack(v)  // 返回结果
+            }
+        }
+        Graph.prototype.dfs = function (v, callBack) {  //递归
+            let color = {}
+            for (let i = 0; i < this.vertexes.length; i++){
+                color[this.vertexes[i]] = 'white' // 未访问
+            }
+            function dfsVisit(v, color, callBack) {
+                color[v] = 'gray'
+                callBack(v)
+                let vList = this.edges.get(v)
+                for(let i = 0; i < vList.length; i++){
+                    if (color[vList[i]] === 'white'){
+                        dfsVisit(vList[i], color, callBack)
+                    }
+                }
+            }
+
+        }
+    }
+     let graph = new Graph()
+    let vertexes = ['A','B','C','D','E','F','G','H','I']
+    vertexes.forEach(item => {
+        graph.addVertex(item)
+    })
+    graph.addEdge('A','B')
+    graph.addEdge('A','C')
+    graph.addEdge('A','D')
+    graph.addEdge('C','D')
+    graph.addEdge('C','G')
+    graph.addEdge('D','G')
+    graph.addEdge('D','H')
+    graph.addEdge('B','E')
+    graph.addEdge('B','F')
+    graph.addEdge('E','I')
+    console.log(graph.toString())
+    let result = ''
+    graph.bfs(graph.vertexes[0], res => {
+        result += res + ' '
+    })
+    console.log(result)
+    let resultDfs = ''
+    graph.dfs(graph.vertexes[0], res => {
+        resultDfs += res + ' '
+    })
+    console.log(result)
+</script>
+</body>
+</html>
