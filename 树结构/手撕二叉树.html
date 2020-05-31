@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function BinarySearchTree() {
+        this.root = null
+        function Node(key) {
+            this.key = key
+            this.left = null
+            this.right = null
+        }
+
+        BinarySearchTree.prototype.insert = function (key) {
+            let newNode = new Node(key)
+            if(this.root === null) {
+                this.root = newNode
+            }else {
+                this.insertNode(this.root, newNode)
+            }
+
+        }
+        BinarySearchTree.prototype.insertNode = function (node, newNode) {
+           if (newNode.key < node.key) {
+               if (node.left === null){
+                   node.left = newNode
+               } else {
+                   this.insertNode(node.left, newNode)
+               }
+           } else {
+               if (node.right === null){
+                   node.right = newNode
+               } else {
+                   this.insertNode(node.right, newNode)
+               }
+           }
+        }
+        BinarySearchTree.prototype.search = function (key) {
+            let curent = this.root
+            while (curent !== null) {
+                if (key < curent.key) {
+                    curent = curent.left
+                } else if (key > curent.key) {
+                    curent = curent.right
+                } else {
+                    return true
+                }
+            }
+            return false
+        }
+        BinarySearchTree.prototype.OrderTraversal = function (callBack) {
+            this.OrderTraversalNode(this.root, callBack)
+        }
+        BinarySearchTree.prototype.OrderTraversalNode = function (node, callBack) {
+            if (node !== null) {
+                callBack(node.key)  // 先序
+                this.preOrderTraversalNode(node.left, callBack)
+                // callBack(node.key)  // 中序
+                this.preOrderTraversalNode(node.right, callBack)
+                // callBack(node.key)  // 后序
+            }
+        }
+        BinarySearchTree.prototype.max = function () {
+            let node = this.root
+            while (node.right !== null) {
+                node = node.right
+            }
+            return node.key
+        }
+        BinarySearchTree.prototype.min = function () {
+            let node = this.root
+            while (node.left !== null) {
+                node = node.left
+            }
+            return node.key
+        }
+        BinarySearchTree.prototype.remove = function (key) {
+            let current = this.root
+            let parent = null
+            let isLeftChild = false
+            while(key !== current.key) {  // 寻找key
+                if (current === null) return false
+                parent = current
+                if (key < current.left) {
+                    isLeftChild = true
+                    current = current.left
+                } else {
+                    isLeftChild = false
+                    current = current.right
+                }
+            }
+           if (current.left === null && current.right === null) {
+               if (current === this.root) {
+                   this.root = null
+               }else if (isLeftChild) {
+                    parent.left = null
+                } else {
+                    parent.right = null
+                }
+           } else if (current.left === null) {
+               if (current === this.root) {
+                   this.root = current.left
+               }else if (isLeftChild) {
+                    parent.left = current.left
+                } else {
+                    parent.right = current.left
+                }
+           } else if (current.right === null) {
+               if (current === this.root) {
+                   this.root = current.right
+               }else if (isLeftChild) {
+                    parent.left = current.right
+               } else {
+                    parent.right = current.right
+               }
+           } else {
+               let succssor = this.getSuccssor(current)
+               if (current === this.root) {
+                   this.root = succssor
+               }else if (isLeftChild) {
+                   parent.left = succssor
+               } else {
+                   parent.right = succssor
+               }
+               succssor.left = current.left
+           }
+        }
+        BinarySearchTree.prototype.getSuccssor = function (node) {
+            let succssor = node
+            let current = node.right
+            let succssorParent = null
+            while (current !== null) {
+                succssorParent = succssor
+                succssor = current
+                current = current.left
+            }
+            if (succssor !== node.right) {
+                succssorParent.left = succssor.right
+                succssor.right = node.right
+            }
+            return succssor
+        }
+    }
+</script>
+</body>
+</html>
