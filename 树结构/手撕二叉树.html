@@ -125,7 +125,7 @@
                } else {
                    parent.right = succssor
                }
-               succssor.left = current.left
+               succssor.left = current.left.right
            }
         }
         BinarySearchTree.prototype.getSuccssor = function (node) {
